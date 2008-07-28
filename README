@@ -1,0 +1,70 @@
+	Miasma: an x86 machine code toolkit
+	http://accesscom.com/~darius/software/miasma/
+	Version 0.3
+
+	By Darius Bacon <darius@accesscom.com>
+	and Brian Spilsbury <brian@designix.com.au>.
+	Distributed under the GNU Lesser General Public License; 
+	see the accompanying COPYING file for details.
+
+
+QUICK START
+
+To run, enter (load "loadme.scm") after editing that file to use the
+portability-foo.scm appropriate to your Scheme system.  Then enter
+(generate-c-assembler "c/asm.h") to generate an asm.h file.  c/calc.c
+is a trivial sample jit compiler using it.  That's all there is that's
+usable in this version (and not very, at that).  See Miasma 0.1 for a
+version that has seen some actual use.
+
+Similarly, you can regenerate the Python code emitter with
+(generate-py-assembler "python/x86.py").  To use it, cd into the
+python subdirectory, run `make', then `python test.py' or `python
+calc.py "2 3 +"'.  test.py builds and calls a trivial function that
+adds 42 to its argument.  calc.py compiles an RPN expression, then
+calls the compiled code.
+
+
+ABOUT
+
+Miasma is a Scheme program that generates x86 machine code generators.
+Its intended uses include compiler backends and runtime code
+generation, and perhaps in the future other machine-code toolkit
+functions like disassembly.
+
+Version 0.1 was torn bodily out of Vapour
+(http://vapour.sourceforge.net).  0.2 was redesigned to make it easier
+to generate code for different purposes from the instruction tables,
+e.g. backends in different languages -- though so far all I've done is
+a C backend.  Scheme and Common Lisp backends should be easy to put
+back in but I haven't had a need for one yet.  0.3 adds a Python
+backend.
+
+
+DOCUMENTATION
+
+This version is undocumented.  These docs were for 0.1 but should
+still shed some light:
+
+	old/doc/Usage.text	The assembler syntax
+	old/doc/Overview.text	How the implementation works
+
+
+LICENSE
+
+Miasma x86 machine code toolkit
+Copyright (C) 2000,2002  Darius Bacon and Brian Spilsbury
+
+This library is free software; you can redistribute it and/or
+modify it under the terms of the GNU Lesser General Public
+License as published by the Free Software Foundation; either
+version 2 of the License, or (at your option) any later version.
+
+This library is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public
+License along with this library; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA
