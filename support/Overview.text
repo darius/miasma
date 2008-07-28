@@ -1,0 +1,28 @@
+Various helpful packages not logically part of the compiler.
+
+helpers.scm:
+  Random utility functions.
+
+macro.scm:
+  A macro system for Scheme, since I can't depend on any particular 
+  Scheme to have a standard one.  Used only for record-macros.scm.
+
+mword.scm:
+  32-bit 2's-complement machine words.
+
+object.scm:
+  A simple object system based on prototypes instead of classes.
+
+ordset.scm:
+  Generic sets of values with a total order defined on them.
+
+record.scm:
+  Functions defining record types in portable Scheme.
+
+record-macros.scm:
+  Macros for define-record and record-case, which are syntactic sugar
+  for the stuff in record.scm.
+
+slib.fasl:
+  Used for prettyprinting on my home installation of the UTS Scheme
+  system.  Totally useless for anyone else; ignore it.

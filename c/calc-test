@@ -1,0 +1,18 @@
+#!/bin/sh
+(
+./calc '0' &&
+./calc '42' &&
+./calc '0 42 -' &&
+./calc '0 0 42 - -' &&
+
+./calc ' 2 3 +' &&
+./calc ' 5  4 0 3 - *  +  1 +'
+) >tmp-output
+
+echo '0
+42
+-42
+42
+5
+-6' |
+diff tmp-output -

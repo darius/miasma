@@ -1,0 +1,13 @@
+-*- text -*-
+
+0.3:
+
+ - added Python code emitter
+
+0.2:
+
+ - massive reorganization
+
+0.1:
+
+ - torn bodily out of Vapour and repackaged as a standalone program

@@ -1,0 +1,18 @@
+#!/bin/sh
+(
+python calc.py '0' &&
+python calc.py '42' &&
+python calc.py '0 42 -' &&
+python calc.py '0 0 42 - -' &&
+
+python calc.py ' 2 3 +' &&
+python calc.py ' 5  4 0 3 - *  +  1 +'
+) >tmp-output
+
+echo '0
+42
+-42
+42
+5
+-6' |
+diff tmp-output -

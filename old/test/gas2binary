@@ -1,0 +1,5 @@
+#!/bin/sh
+gas $1.s -o /tmp/$1.o && ld -Ttext 0 -oformat binary /tmp/$1.o -o tmp &&
+split -b 1048576 tmp &&
+mv xab $1.o &&
+rm xaa tmp /tmp/$1.o

@@ -1,0 +1,65 @@
+Overview of the implementation.
+
+The instruction table is the central data structure.  Let's look at
+some sample lines from tables/i386.scm:
+
+;stem   params                  doc-string
+(adc    #x14 %AL Ib             "Add with carry")
+(adc    #x15 %eAX Iv            "Add with carry")
+(adc    #x80 (/2 Eb) Ib         "Add with carry")
+(adc    #x81 (/2 Ev) Iv         "Add with carry")
+
+These describe the Miasma instructions named 
+
+adc.%AL.Ib
+adc.%eAX.Iv
+adc.Eb.Ib
+adc.Ev.Iv
+
+To generate code for an instruction, we locate its table entry from
+its mnemonic, then proceed through the params from left to right,
+consuming corresponding arguments.  A literal param like #x14 emits
+itself as an opcode byte; a register like %AL does nothing, since it's
+there simply to disambiguate the overloaded adc instruction; Ib
+consumes an immediate argument and emits it.  (/2 Eb) consumes an
+effective-address argument and writes a mod-r/m sequence, with 2 (from
+/2) as a 3 bit extended opcode field.
+
+Code generation doesn't actually interpret this table directly --
+instead, we preparse an entry into a list of param objects.  For
+example, (/2 Eb) becomes the result of the procedure call 
+
+	(Ex-param 2 (expand-abbrev 'Eb))
+
+It should be clear that disassembly can proceed in the same way --
+going through a table entry in order, consuming machine-code bits that
+correspond to each param.  The param list is in the same order as the
+machine-code bits.  This is not yet implemented.
+
+Some further examples:
+
+(adc    #x10 (/r Eb Gb)         "Add with carry")
+(adc    #x12 (/r Gb Eb)         "Add with carry")
+
+These show that, while params are always in machine-code order, the
+components of a param don't have to be.  /r is the only param type
+with two components, and either order produces the same machine code;
+the order in the entry is the same as the Intel syntax's, so that
+destination operands come first.
+
+
+What the Scheme files do:
+
+assemble.scm	Translate sequences of instructions, resolving labels.
+bits.scm	Fixed-width 2's-complement numbers.
+gas.scm		Translate Miasma programs to gas syntax.
+java.scm        Experimental Java code producer -- can be ignored.
+miasma.scm	Load the system and run unit tests.
+parse.scm	Convert instruction-table entries to internal form.
+sinks.scm	Sinks for byte streams.
+x86.scm		The actual Intel x86 logic -- code production, etc.
+
+tables/*.scm	The instruction tables.  Only i386.scm is used right now.
+
+test-<foo>.scm	Unit tests for <foo>.scm.
+fun-tests.scm	Functional tests of the whole system.

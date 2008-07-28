@@ -1,0 +1,10 @@
+allow symbols with the same name as a register
+local labels
+allow instruction prefixes in auto-test against nasm
+procedural interface to assembly
+
+
+things that need better names:
+ - specs
+ - params
+ - operands
