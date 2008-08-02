@@ -28,7 +28,7 @@ def dump_code():
 
 def dump_hex(str):
     for b in str:
-	print '%02x' % ord(b),
+        print '%02x' % ord(b),
     print
 
 

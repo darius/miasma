@@ -10,13 +10,13 @@
 ;(expect (string #\" #\x #\") argument->gas "x")
 
 ;(expect (string #\" #\\ #\n #\")
-;	argument->gas (string #\newline))
+;       argument->gas (string #\newline))
 ;(expect (string #\" #\\ #\n #\\ #\t #\")
-;	argument->gas (string #\newline #\tab))
+;       argument->gas (string #\newline #\tab))
 ;(expect (string #\" #\x #\\ #\t #\") 
-;	argument->gas (string #\x #\tab))
+;       argument->gas (string #\x #\tab))
 ;(expect (string #\" #\\ #\x #\8 #\x #\\ #\t #\") 
-;	argument->gas (string (byte->char 8) #\x #\tab))
+;       argument->gas (string (byte->char 8) #\x #\tab))
 
 (expect "mov"           gas-mnemonic (find-spec 'MOV.Gv.Iv) '(%eax 42))
 
