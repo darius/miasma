@@ -13,14 +13,14 @@
 (define write-java-sink
   (lambda (spec)
     (let ((stem (spec.stem spec))
-	  (params (spec.params spec)))
+          (params (spec.params spec)))
       (let* ((types (flatmap java-arg-types params))
-	     (names (java-arg-names types)))
-	(say "void " (make-java-mnemonic stem params) 
-	     "(" (commaify (map java-decl types names)) ")")
-	(say "{")
-	(write-java-param-sinks params (distribute-args params names))
-	(say "}")))))
+             (names (java-arg-names types)))
+        (say "void " (make-java-mnemonic stem params) 
+             "(" (commaify (map java-decl types names)) ")")
+        (say "{")
+        (write-java-param-sinks params (distribute-args params names))
+        (say "}")))))
 
 ; FIXME: code copied from assemble-params
 (define write-java-param-sinks
@@ -35,10 +35,10 @@
 (define java-arg-names
   (lambda (types)
     (map (lambda (type k)
-	   (string-append (string (char-downcase (string-ref type 0)))
-			  (number->string k)))
-	 types
-	 (iota (length types)))))
+           (string-append (string (char-downcase (string-ref type 0)))
+                          (number->string k)))
+         types
+         (iota (length types)))))
 
 (define java-decl
   (lambda (type name)
@@ -53,11 +53,11 @@
   (lambda (stem params)
     (string->symbol
      (string-join `("x86" 
-		    ,(as-legal-java-identifier stem)
-		    ,@(map as-legal-java-identifier
-			   (flatmap name-suffix
-				    params)))
-		  "_"))))
+                    ,(as-legal-java-identifier stem)
+                    ,@(map as-legal-java-identifier
+                           (flatmap name-suffix
+                                    params)))
+                  "_"))))
 
 ;; (string) -> string
 ;; Return STR, but munging out any characters that are used in our 
@@ -66,9 +66,9 @@
   (lambda (str)
     (list->string
      (map (lambda (c)
-	    (case c
-	      ((#\-) #\_)
-	      ((#\?) #\c)
-	      (else c)))
-	  (filter (lambda (c) (not (memq c '(#\: #\%))))
-		  (string->list str))))))
+            (case c
+              ((#\-) #\_)
+              ((#\?) #\c)
+              (else c)))
+          (filter (lambda (c) (not (memq c '(#\: #\%))))
+                  (string->list str))))))

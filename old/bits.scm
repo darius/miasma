@@ -19,23 +19,23 @@
 (define fits-in-signed?
   (lambda (bits k)
     (and (integer? k)
-	 (let ((p (expt 2 (- bits 1))))
-	   (<= (- p) k (- p 1))))))
+         (let ((p (expt 2 (- bits 1))))
+           (<= (- p) k (- p 1))))))
 
 (define fits-in-unsigned?
   (lambda (bits k)
     (and (integer? k)
-	 (let ((p (expt 2 bits)))
-	   (<= 0 k (- p 1))))))
+         (let ((p (expt 2 bits)))
+           (<= 0 k (- p 1))))))
 
 (define signed->unsigned
   (lambda (bits k)
     (if (<= 0 k) 
-	k
-	(let ((unsigned (+ (expt 2 bits) k)))
-	  (if (< unsigned 0)
-	      (panic "Value out of range" k))
-	  unsigned))))
+        k
+        (let ((unsigned (+ (expt 2 bits) k)))
+          (if (< unsigned 0)
+              (panic "Value out of range" k))
+          unsigned))))
 
 ;; Pre: b is a multiple of 8
 (define bits->bytes
@@ -46,4 +46,4 @@
 (define byte?
   (lambda (x)
     (and (integer? x)
-	 (fits-in-unsigned? 8 x))))
+         (fits-in-unsigned? 8 x))))

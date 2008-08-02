@@ -1,11 +1,11 @@
-	Miasma: an x86 machine code toolkit
-	http://accesscom.com/~darius/software/miasma/
-	Version 0.3
+        Miasma: an x86 machine code toolkit
+        http://accesscom.com/~darius/software/miasma/
+        Version 0.3
 
-	By Darius Bacon <darius@accesscom.com>
-	and Brian Spilsbury <brian@designix.com.au>.
-	Distributed under the GNU Lesser General Public License; 
-	see the accompanying COPYING file for details.
+        By Darius Bacon <darius@accesscom.com>
+        and Brian Spilsbury <brian@designix.com.au>.
+        Distributed under the GNU Lesser General Public License; 
+        see the accompanying COPYING file for details.
 
 
 QUICK START
@@ -13,9 +13,10 @@ QUICK START
 To run, enter (load "loadme.scm") after editing that file to use the
 portability-foo.scm appropriate to your Scheme system.  Then enter
 (generate-c-assembler "c/asm.h") to generate an asm.h file.  c/calc.c
-is a trivial sample jit compiler using it.  That's all there is that's
-usable in this version (and not very, at that).  See Miasma 0.1 for a
-version that has seen some actual use.
+is a trivial sample jit compiler using it.  That, and the Python
+equivalent below, are all there is that's usable in this version (and
+not very, at that).  See Miasma 0.1 for a version that has seen some
+actual use.
 
 Similarly, you can regenerate the Python code emitter with
 (generate-py-assembler "python/x86.py").  To use it, cd into the
@@ -46,8 +47,8 @@ DOCUMENTATION
 This version is undocumented.  These docs were for 0.1 but should
 still shed some light:
 
-	old/doc/Usage.text	The assembler syntax
-	old/doc/Overview.text	How the implementation works
+        old/doc/Usage.text      The assembler syntax
+        old/doc/Overview.text   How the implementation works
 
 
 LICENSE

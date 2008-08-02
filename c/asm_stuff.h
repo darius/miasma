@@ -1,9 +1,9 @@
-typedef   signed int   i32;	/* 32-bit, signed */
-typedef unsigned int   u32;	/* 32-bit, unsigned */
-typedef   signed short i16;	/* 16-bit, signed */
-typedef unsigned short u16;	/* 16-bit, unsigned */
-typedef   signed char   i8;	/*  8-bit, signed */
-typedef unsigned char   u8;	/*  8-bit, unsigned */
+typedef   signed int   i32;     /* 32-bit, signed */
+typedef unsigned int   u32;     /* 32-bit, unsigned */
+typedef   signed short i16;     /* 16-bit, signed */
+typedef unsigned short u16;     /* 16-bit, unsigned */
+typedef   signed char   i8;     /*  8-bit, signed */
+typedef unsigned char   u8;     /*  8-bit, unsigned */
 
 typedef u8 *x86_bufptr;
 

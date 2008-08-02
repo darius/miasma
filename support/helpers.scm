@@ -8,9 +8,9 @@
   (lambda (str ch)
     (let ((L (string-length str)))
       (let loop ((i 0))
-	(cond ((= i L) #f)
-	      ((char=? ch (string-ref str i)) i)
-	      (else (loop (+ i 1))))))))
+        (cond ((= i L) #f)
+              ((char=? ch (string-ref str i)) i)
+              (else (loop (+ i 1))))))))
 
 ;; Return string STR with special characters replaced by escape
 ;; sequences.  DELIMITER is one such special character.
@@ -18,17 +18,17 @@
   (lambda (delimiter str)
     (define escapify-one
       (lambda (c accum)
-	(cond ((char=? c delimiter)
-	       `(#\\ ,c ,@accum))
-	      ((assv c '((#\newline #\\ #\n)
-			 (#\Tab     #\\ #\t)))
-	       => (lambda (pair) (append (cdr pair) accum)))
-	      ((char-printable? c)
-	       (cons c accum))
-	      (else
-	       `(#\\ #\x
-		     ,@(string->list (number->string (char->integer c) 16))
-		     ,@accum)))))
+        (cond ((char=? c delimiter)
+               `(#\\ ,c ,@accum))
+              ((assv c '((#\newline #\\ #\n)
+                         (#\Tab     #\\ #\t)))
+               => (lambda (pair) (append (cdr pair) accum)))
+              ((char-printable? c)
+               (cons c accum))
+              (else
+               `(#\\ #\x
+                     ,@(string->list (number->string (char->integer c) 16))
+                     ,@accum)))))
     (list->string (foldr escapify-one '() (string->list str)))))
 
 ;; Return string STR escapified and surrounded by the character DELIMITER.
@@ -41,7 +41,7 @@
 (define say-to
   (lambda (port . args)
     (for-each (lambda (arg) (display arg port))
-	      args)
+              args)
     (newline port)))
 
 ;; SAY-TO stdout.
@@ -64,10 +64,10 @@
 (define coerce-string
   (lambda (x)
     (cond ((symbol? x) (symbol->string x))
-	  ((string? x) x)
-	  ((integer? x) (integer->string x))
-	  ((number? x) (number->string x))
-	  (else (impossible)))))
+          ((string? x) x)
+          ((integer? x) (integer->string x))
+          ((number? x) (number->string x))
+          (else (impossible)))))
 
 (define identity (lambda (x) x))
 
@@ -75,8 +75,8 @@
 (define clamped-tail
   (lambda (ls k)
     (cond ((= k 0) ls)
-	  ((pair? ls) (clamped-tail (cdr ls) (- k 1)))
-	  (else #f))))
+          ((pair? ls) (clamped-tail (cdr ls) (- k 1)))
+          (else #f))))
 
 ;; I wonder why the hell aly wants all this, but okay, here it is:
 ;; Return true iff (length LS) is =, >=, etc., to K.
@@ -106,39 +106,39 @@
 (define split-on
   (lambda (split-point? ls receiver)
     (if (or (null? ls)
-	    (split-point? (car ls)))
-	(receiver '() ls)
-	(split-on split-point?
-		  (cdr ls)
-		  (lambda (head tail)
-		    (receiver (cons (car ls) head) 
-			      tail))))))
+            (split-point? (car ls)))
+        (receiver '() ls)
+        (split-on split-point?
+                  (cdr ls)
+                  (lambda (head tail)
+                    (receiver (cons (car ls) head) 
+                              tail))))))
 
 ;; This needs a better name -- and the sense of the predicate is
 ;; opposite that of split-on...
 (define eat
   (lambda (include? ls receiver)
     (if (include? (car ls))
-	(receiver (car ls) (cdr ls))
-	(receiver #f       ls))))
+        (receiver (car ls) (cdr ls))
+        (receiver #f       ls))))
 
 ;; The standard fold operator on lists.
 (define foldr
   (lambda (fn id lst)
     (let folding ((lst lst))
       (if (null? lst)
-	  id
-	  (fn (car lst)
-	      (folding (cdr lst)))))))
+          id
+          (fn (car lst)
+              (folding (cdr lst)))))))
 
 ;; Fold from the left instead of the right.
 (define foldl
   (lambda (fn id lst)
     (let folding ((lst lst) (id id))
       (if (null? lst)
-	  id
-	  (folding (cdr lst)
-		   (fn (car lst) id))))))
+          id
+          (folding (cdr lst)
+                   (fn (car lst) id))))))
 
 ;; Like mapcan in Common Lisp.
 (define flatmap
@@ -149,62 +149,62 @@
 (define all
   (lambda (test? ls)
     (if (null? ls)
-	#t
-	; We treat the last element specially for the sake of tail recursion.
-	(let testing ((first (car ls)) (rest (cdr ls)))
-	  (if (null? rest)
-	      (test? first)
-	      (and (test? first)
-		   (testing (car rest) (cdr rest))))))))
+        #t
+        ; We treat the last element specially for the sake of tail recursion.
+        (let testing ((first (car ls)) (rest (cdr ls)))
+          (if (null? rest)
+              (test? first)
+              (and (test? first)
+                   (testing (car rest) (cdr rest))))))))
 
 ;; Return the first true result from mapping TEST? over LS,
 ;; or #f if none.
 (define any
   (lambda (test? ls)
     (if (null? ls)
-	#f
-	(let testing ((first (car ls)) (rest (cdr ls)))
-	  (if (null? rest)
-	      (test? first)
-	      (or (test? first)
-		  (testing (car rest) (cdr rest))))))))
+        #f
+        (let testing ((first (car ls)) (rest (cdr ls)))
+          (if (null? rest)
+              (test? first)
+              (or (test? first)
+                  (testing (car rest) (cdr rest))))))))
 
 ;; Return the first element of LS for which TEST? is true, or #f if none.
 (define find
   (lambda (test? ls)
     (let finding ((ls ls))
       (cond ((null? ls)
-	     #f)
-	    ((test? (car ls))
-	     (car ls))
-	    (else (finding (cdr ls)))))))
+             #f)
+            ((test? (car ls))
+             (car ls))
+            (else (finding (cdr ls)))))))
 
 ;; Return all elements of LS for which TEST? is true, in order.
 (define filter
   (lambda (test? ls)
     (let loop ((ls ls))
       (cond ((null? ls)
-	     '())
-	    ((test? (car ls))
-	     (cons (car ls) (loop (cdr ls))))
-	    (else (loop (cdr ls)))))))
+             '())
+            ((test? (car ls))
+             (cons (car ls) (loop (cdr ls))))
+            (else (loop (cdr ls)))))))
 
 ;; Return a copy of list LS with any elements eq? to OBJ deleted.
 (define delq
   (lambda (obj ls)
     (filter (lambda (x) (not (eq? x obj)))
-	    ls)))
+            ls)))
 
 ;; Return a list of the s-exprs in FILE.
 (define snarf
   (lambda (file)
     (call-with-input-file file
       (lambda (port)
-	(let loop ((exps '()))
-	  (let ((exp (read port)))
-	    (if (eof-object? exp)
-		(reverse exps)
-		(loop (cons exp exps)))))))))
+        (let loop ((exps '()))
+          (let ((exp (read port)))
+            (if (eof-object? exp)
+                (reverse exps)
+                (loop (cons exp exps)))))))))
 
 ;; Pre: SMALL is eq? to some tail of BIG.
 ;; Return the head of BIG before that tail.
@@ -212,9 +212,9 @@
   (lambda (big small)
     (let loop ((ls big))
       (if (eq? ls small)
-	  '()
-	  (cons (car ls)
-		(loop (cdr ls)))))))
+          '()
+          (cons (car ls)
+                (loop (cdr ls)))))))
 
 ;; Pre: XSS is a list of lists.
 ;; Return a list of all lists whose first element is in (car XSS),
@@ -228,41 +228,41 @@
 (define outer-product
   (lambda (xs ys)
     (flatmap (lambda (x)
-	       (map (lambda (y) (cons x y)) ys))
-	     xs)))
+               (map (lambda (y) (cons x y)) ys))
+             xs)))
 
 ;; Pre: 0 <= COUNT <= (length LS)
 ;; Return a list of the first COUNT elements of LS in order.
 (define list-head
   (lambda (ls count)
     (if (= count 0)
-	'()
-	(cons (car ls)
-	      (list-head (cdr ls) (- count 1))))))
+        '()
+        (cons (car ls)
+              (list-head (cdr ls) (- count 1))))))
 
 ;; Call PROC with each element of VEC, in index order.
 (define vector-for-each
   (lambda (vec proc)
     (let ((limit (vector-length vec)))
       (do ((k 0 (+ k 1)))
-	  ((= k limit))
-	(proc (vector-ref vec k))))))
+          ((= k limit))
+        (proc (vector-ref vec k))))))
 
 ;; Return list LS minus its Nth element (counting from 0).
 (define remove-nth
   (lambda (ls n)
     (if (= 0 n)
-	(cdr ls)
-	(cons (car ls) 
-	      (remove-nth (cdr ls) (- n 1))))))
+        (cdr ls)
+        (cons (car ls) 
+              (remove-nth (cdr ls) (- n 1))))))
 
 ;; Return list LS minus its first element equal? to ELEM.
 (define remove
   (lambda (elem ls)
     (let loop ((ls ls))
       (cond ((null? ls) '())
-	    ((equal? (car ls) elem) (cdr ls))
-	    (else (cons (car ls) (loop (cdr ls))))))))
+            ((equal? (car ls) elem) (cdr ls))
+            (else (cons (car ls) (loop (cdr ls))))))))
 
 ;; Return list LS minus its last element.
 ;; Pre: 0 < (length LS)
@@ -275,29 +275,29 @@
 (define last
   (lambda (ls)
     (if (null? (cdr ls))
-	(car ls)
-	(last (cdr ls)))))
+        (car ls)
+        (last (cdr ls)))))
 
 ;; Call (PROC) COUNT times.
 (define dotimes
   (lambda (count proc)
     (do ((c count (- c 1)))
-	((<= c 0))
+        ((<= c 0))
       (proc))))
 
 ;; True iff OBJ is a list starting with KEY.
 (define starts-with?
   (lambda (key obj)
     (and (pair? obj)
-	 (eq? key (car obj)))))
+         (eq? key (car obj)))))
 
 ;; Return the list of integers 1..n.
 (define iota
   (lambda (n)
     (let counting ((i n) (ls '()))
       (if (<= i 0)
-	  ls
-	  (counting (- i 1) (cons i ls))))))
+          ls
+          (counting (- i 1) (cons i ls))))))
 
 ;; Needed because a lame Scheme like UTS might not have 32-bit ints.
 ;; Pre: n is an integer.
@@ -309,9 +309,9 @@
 (define trim-trailing
   (lambda (str char)
     (do ((i (string-length str) (- i 1)))
-	((or (= i 0)
-	     (not (char=? char (string-ref str (- i 1)))))
-	 (substring str 0 i)))))
+        ((or (= i 0)
+             (not (char=? char (string-ref str (- i 1)))))
+         (substring str 0 i)))))
 
 ;; Pre: STRINGS is a list of strings, BETWEEN is a string.
 ;; Return the concatenation of the STRINGS with BETWEEN between
@@ -319,14 +319,14 @@
 (define string-join
   (lambda (strings between)
     (if (null? strings)
-	""
-	(list->string
-	 (let ((tween (string->list between)))
-	   (let appending ((ls strings))
-	     (let ((head (string->list (car ls))))
-	       (if (null? (cdr ls))
-		   head
-		   (append head tween (appending (cdr ls)))))))))))
+        ""
+        (list->string
+         (let ((tween (string->list between)))
+           (let appending ((ls strings))
+             (let ((head (string->list (car ls))))
+               (if (null? (cdr ls))
+                   head
+                   (append head tween (appending (cdr ls)))))))))))
 
 ;; Pre: IN and OUT are input and output ports.
 ;; Copy all remaining characters from IN to OUT.
@@ -334,9 +334,9 @@
   (lambda (in out)
     (let copying ()
       (let ((char (read-char in)))
-	(cond ((not (eof-object? char))
-	       (write-char char out)
-	       (copying)))))))
+        (cond ((not (eof-object? char))
+               (write-char char out)
+               (copying)))))))
  
 
 ;;;
@@ -362,9 +362,9 @@
   (lambda (result fn . args)
     (let ((actual (apply fn args)))
       (if (not (equal? actual result))
-	  (panic "Test failed" (cons fn args) actual "but expected" result)))))
+          (panic "Test failed" (cons fn args) actual "but expected" result)))))
 
 (define insist
   (lambda (message ok?)
     (if (not ok?)
-	(panic "Insist failed for:" message))))
+        (panic "Insist failed for:" message))))

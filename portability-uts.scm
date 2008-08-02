@@ -19,7 +19,7 @@
 ;; Like isprint() in C.
 (define char-printable?
   (let ((space (char->integer #\space))
-	(tilde (char->integer #\~)))
+        (tilde (char->integer #\~)))
     (lambda (c)
       (<= space (char->integer c) tilde))))
 
@@ -33,10 +33,10 @@
 (define make-pathname
   (lambda (component . components)
     (apply string-append
-	   (cons component
-		 (apply append
-			(map (lambda (c) (list file-separator c))
-			     components))))))
+           (cons component
+                 (apply append
+                        (map (lambda (c) (list file-separator c))
+                             components))))))
 
 ;; This isn't actually used in the code -- it's included only because
 ;; it's handy for benchmarking stuff.
@@ -45,8 +45,8 @@
 (define timex
   (lambda (proc receiver)
     (let* ((start (@runtime))
-	   (value (proc))
-	   (interval (- (@runtime) start)))
+           (value (proc))
+           (interval (- (@runtime) start)))
       (receiver interval value))))
 
 (define pretty-print 

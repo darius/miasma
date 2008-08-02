@@ -6,7 +6,7 @@
 ;;; Portability defs for MzScheme
 ;;;
 
-(define (pretty-print x)		;FIXME: find the mz prettyprinter
+(define (pretty-print x)                ;FIXME: find the mz prettyprinter
   (write x)
   (newline))
 
@@ -19,7 +19,7 @@
 ;; Like isprint() in C.
 (define char-printable?
   (let ((space (char->integer #\space))
-	(tilde (char->integer #\~)))
+        (tilde (char->integer #\~)))
     (lambda (c)
       (<= space (char->integer c) tilde))))
 
@@ -37,10 +37,10 @@
 (define make-pathname
   (lambda (component . components)
     (apply string-append
-	   (cons component
-		 (apply append
-			(map (lambda (c) (list file-separator c))
-			     components))))))
+           (cons component
+                 (apply append
+                        (map (lambda (c) (list file-separator c))
+                             components))))))
 
 ;; Call RECEIVER with the time it took to compute (PROC), and the result.
 ; FIXME: actually implement it...

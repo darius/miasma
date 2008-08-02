@@ -10,15 +10,15 @@ possible to generate a source listing in gas's input format.
 This assembler's input programs are lists.  Each list element is
 either a label (a symbol) or an instruction (a list).  For example,
 
-	`(
-	      (MOV.Gv.Iv %eax 4)
-	      (MOV.Gv.Iv %ebx 1)
-	      (MOV.Gv.Iv %ecx data)
-	      (MOV.Gv.Iv %edx ,(string-length "Hello, world"))
-	      (INT.Ub    #x80)
-	      (RET)
-	data  (ASCII     "Hello, world")
-	)
+        `(
+              (MOV.Gv.Iv %eax 4)
+              (MOV.Gv.Iv %ebx 1)
+              (MOV.Gv.Iv %ecx data)
+              (MOV.Gv.Iv %edx ,(string-length "Hello, world"))
+              (INT.Ub    #x80)
+              (RET)
+        data  (ASCII     "Hello, world")
+        )
 
 An instruction has a mnemonic, like RET, and a list of arguments.  Why
 the weird mnemonics like MOV.Gv.Iv?  The standard Intel mnemonics,
@@ -42,82 +42,82 @@ Parameter descriptors.
 The names for parameter types are mostly stolen from the Intel
 architecture manual.
 
-Ex	An effective address -- that is, a register, indirect, or
-	indexed operand.
-	
-	The possible values of x (here and below) are
-		b - byte
-		w - word
-		d - doubleword (32 bits)
-		v - variable depending on the size mode or prefix
-		    (16 or 32 bits).  Most 32-bit operands are v
-		    rather than d.
+Ex      An effective address -- that is, a register, indirect, or
+        indexed operand.
+        
+        The possible values of x (here and below) are
+                b - byte
+                w - word
+                d - doubleword (32 bits)
+                v - variable depending on the size mode or prefix
+                    (16 or 32 bits).  Most 32-bit operands are v
+                    rather than d.
 
-	Examples:
-	Miasma			Intel			AT&T
-	(dec.Eb %al)		dec al			decb %al
-	(dec.Ev %eax)		dec eax			decl %eax
-	(dec.Eb (at %esi))	dec byte ptr [esi]	decb (%esi)
-	(dec.Eb (at 42))	dec byte ptr [42]	decb (42)
-	(dec.Eb (at+b %esi 42))	dec byte ptr [esi+42]	decb (%esi+42)
-	(dec.Eb (at+d %esi n))	dec byte ptr [esi+n]	decb (%esi+n)
+        Examples:
+        Miasma                  Intel                   AT&T
+        (dec.Eb %al)            dec al                  decb %al
+        (dec.Ev %eax)           dec eax                 decl %eax
+        (dec.Eb (at %esi))      dec byte ptr [esi]      decb (%esi)
+        (dec.Eb (at 42))        dec byte ptr [42]       decb (42)
+        (dec.Eb (at+b %esi 42)) dec byte ptr [esi+42]   decb (%esi+42)
+        (dec.Eb (at+d %esi n))  dec byte ptr [esi+n]    decb (%esi+n)
 
-	(In the last line, n is a doubleword.)
+        (In the last line, n is a doubleword.)
 
-	The second example also illustrates the overloading issue:
-	since there's also a general-register version of the dec 
-	instruction (dec.Gv), the Intel or AT&T assembler will choose
-	that instead of dec.Ev, producing different code.
+        The second example also illustrates the overloading issue:
+        since there's also a general-register version of the dec 
+        instruction (dec.Gv), the Intel or AT&T assembler will choose
+        that instead of dec.Ev, producing different code.
 
-Gx	A general register.  Possibilities are, depending on x:
-		b   -  %al  %ah  %bl  %bh  %cl  %ch  %dl  %dh
-		w   -  %ax  %bx  %cx  %dx  %si  %di  %bp  %sp
-		d/v - %eax %ebx %ecx %edx %esi %edi %ebp %esp
+Gx      A general register.  Possibilities are, depending on x:
+                b   -  %al  %ah  %bl  %bh  %cl  %ch  %dl  %dh
+                w   -  %ax  %bx  %cx  %dx  %si  %di  %bp  %sp
+                d/v - %eax %ebx %ecx %edx %esi %edi %ebp %esp
 
-Ix	A signed immediate value, of size depending on x.
+Ix      A signed immediate value, of size depending on x.
 
-Jx	A program-counter relative jump offset.
+Jx      A program-counter relative jump offset.
 
-Mx	Like Ex, but restricted to be a memory operand (not a
-	register).
+Mx      Like Ex, but restricted to be a memory operand (not a
+        register).
 
-Ox	...
+Ox      ...
 
-Ux	An unsigned immediate value.
+Ux      An unsigned immediate value.
 
-?	A condition code.  In Miasma, these are arguments rather than
-	part of the mnemonic.  The possible conditions are:
+?       A condition code.  In Miasma, these are arguments rather than
+        part of the mnemonic.  The possible conditions are:
 
-		     ?O  
-		     ?NO 
-		     ?C   ?B   ?NAE (all on the same row have the same meaning)
-		     ?AE  ?NB  ?NC 
-		     ?E   ?Z  
-		     ?NE  ?NZ 
-		     ?BE  ?NA 
-		     ?A   ?NBE
-		     ?S 
-		     ?NS
-		     ?P   ?PE 
-		     ?PO  ?NP 
-		     ?L   ?NGE
-		     ?GE  ?NL 
-		     ?LE  ?NG 
-		     ?G   ?NLE
+                     ?O  
+                     ?NO 
+                     ?C   ?B   ?NAE (all on the same row have the same meaning)
+                     ?AE  ?NB  ?NC 
+                     ?E   ?Z  
+                     ?NE  ?NZ 
+                     ?BE  ?NA 
+                     ?A   ?NBE
+                     ?S 
+                     ?NS
+                     ?P   ?PE 
+                     ?PO  ?NP 
+                     ?L   ?NGE
+                     ?GE  ?NL 
+                     ?LE  ?NG 
+                     ?G   ?NLE
 
-	(j.?.Jb ?A there)	ja there		ja there
+        (j.?.Jb ?A there)       ja there                ja there
 
 register
-	If a particular register is implicit in the instruction's
-	opcode, not an argument to it, then we make the register name
-	part of the mnemonic, rather than an operand.
+        If a particular register is implicit in the instruction's
+        opcode, not an argument to it, then we make the register name
+        part of the mnemonic, rather than an operand.
 
-	(cmp.%eax.Iv 42)	cmp eax, 42		cmpl $42, %eax
+        (cmp.%eax.Iv 42)        cmp eax, 42             cmpl $42, %eax
 
-number	As with registers, a few opcodes include an implicit numeric
-	argument.
+number  As with registers, a few opcodes include an implicit numeric
+        argument.
 
-	(int.3)			int 3			int 3
+        (int.3)                 int 3                   int 3
 
 See tables/i386.scm for a table of the available instructions.  (It's
 not fully populated yet.)  (TODO: I should generate documentation from

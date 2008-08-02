@@ -36,28 +36,28 @@ def emit(op):
     global depth
     # print depth, op
     if op == "+":
-	x86.add_gv_ev(eax, reg(ebx))
-	pop_gv(ebx)
+        x86.add_gv_ev(eax, reg(ebx))
+        pop_gv(ebx)
     elif op == "-":
-	x86.sub_gv_ev(eax, reg(ebx))
-	pop_gv(eax)
-	x86.mov_gv_ev(ebx, reg(eax))
+        x86.sub_gv_ev(eax, reg(ebx))
+        pop_gv(eax)
+        x86.mov_gv_ev(ebx, reg(eax))
     elif op == "*":
-	x86.imul_ev(reg(ebx))
-	pop_gv(ebx)
+        x86.imul_ev(reg(ebx))
+        pop_gv(ebx)
     elif op == "/":
-	x86.idiv_ev(reg(ebx))
-	x86.mov_gv_iv(edx, 0)
-	pop_gv(eax)
-	x86.mov_gv_ev(ebx, reg(eax))
+        x86.idiv_ev(reg(ebx))
+        x86.mov_gv_iv(edx, 0)
+        pop_gv(eax)
+        x86.mov_gv_ev(ebx, reg(eax))
     elif op == "%":
-	x86.mov_gv_ev(eax, reg(edx))
-	x86.idiv_ev(reg(ebx))
-	x86.mov_gv_iv(edx, 0)
-	pop_gv(eax)
-	x86.mov_gv_ev(ebx, reg(eax))
+        x86.mov_gv_ev(eax, reg(edx))
+        x86.idiv_ev(reg(ebx))
+        x86.mov_gv_iv(edx, 0)
+        pop_gv(eax)
+        x86.mov_gv_ev(ebx, reg(eax))
     else:
-	gen_push(op)
+        gen_push(op)
 
 stack = array.array('i', [0]*256)
 stack_address, stack_length = stack.buffer_info()
@@ -70,12 +70,12 @@ def compile(str):
     tokens.reverse()
     for token in tokens:
         try:
-	    op = int(token)
-	    depth = depth - 1
-	except ValueError:
-	    op = token
-	    depth = depth + 1
-	emit(op)
+            op = int(token)
+            depth = depth - 1
+        except ValueError:
+            op = token
+            depth = depth + 1
+        emit(op)
     x86.mov_gv_iv(esi, stack_address)
     prolog()
 
@@ -94,7 +94,7 @@ def dump_code():
 
 def dump_hex(str):
     for b in str:
-	print '%02x' % ord(b),
+        print '%02x' % ord(b),
     print
 
 if __name__ == '__main__':

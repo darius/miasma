@@ -33,12 +33,12 @@
   (lambda (sink count word)
     (let loop ((k count) (w (or word 0)))
       (cond ((= 0 k)
-	     (if (not (= 0 w))
-		 (panic "Value out of range" word))
-	     count)
-	    (else
-	     (sink (remainder w 256))
-	     (loop (- k 1) (quotient w 256)))))))
+             (if (not (= 0 w))
+                 (panic "Value out of range" word))
+             count)
+            (else
+             (sink (remainder w 256))
+             (loop (- k 1) (quotient w 256)))))))
 
 (define put-signed-bytes
   (lambda (sink count word)

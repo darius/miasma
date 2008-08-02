@@ -36,8 +36,8 @@
     ))
 
 (for-each macroexpand-file 
-	  (map (in-directory "src") source-files)
-	  (map (in-directory "expanded") source-files))
+          (map (in-directory "src") source-files)
+          (map (in-directory "expanded") source-files))
 (for-each (load-from "expanded") source-files)
 
 (setup-spec-table)

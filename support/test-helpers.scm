@@ -21,11 +21,11 @@
 (expect '()     outer-product '()  '(x))
 (expect '((a . x)) outer-product '(a)  '(x))
 (expect '((a . x) (a . y) (a . z) (b . x) (b . y) (b . z))
-	        outer-product '(a b)  '(x y z))
+                outer-product '(a b)  '(x y z))
 
 (expect '(())   outer-product* '())
 (expect '((a c x) (a c y) (a c z) (b c x) (b c y) (b c z))
-	        outer-product* '((a b) (c) (x y z)))
+                outer-product* '((a b) (c) (x y z)))
 
 (expect '()     list-head '() 0)
 (expect '()     list-head '(a b c) 0)

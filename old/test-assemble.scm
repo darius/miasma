@@ -3,5 +3,5 @@
 ; Refer to legal/License.txt
 
 (insist "Registers resolve to themselves"
-	(all (lambda (r) (eq? r (resolve r '() 0))) 
-	     registers))
+        (all (lambda (r) (eq? r (resolve r '() 0))) 
+             registers))

@@ -28,7 +28,7 @@
 (define (relative-jump-param operand)
   (let ((size (operand.size operand)))
     `(bytes i ,size
-	    (- (arg int) (hereafter)))))
+            (- (arg int) (hereafter)))))
 
 ;; A segment-relative offset field (if I understand this... probably not)
 (define (offset-param operand)
@@ -46,22 +46,22 @@
 (define (opcode+register-param opcode-byte operand)
   (let ((size (operand.size operand)))
     `(bytes u 1 (+ ,opcode-byte
-		   (arg reg ,size)))))
+                   (arg reg ,size)))))
 
 ;; A pair of fields that go into a mod-r/m encoding.  Ex is effective
 ;; address, Gx is general register.
 (define (Ex.Gx-param Ex Gx)
   `(swap-args
     (mod-r/m (arg reg ,(operand.size Gx))
-	     (arg ,Ex))))
+             (arg ,Ex))))
 
 ;; Like Ex.Gx, but with source arguments in the opposite order.
 (define (Gx.Ex-param Gx Ex)
   `(mod-r/m (arg reg ,(operand.size Gx))
-	    (arg ,Ex)))
+            (arg ,Ex)))
 
 ;; Like Ex.Gx, this becomes a mod-r/m, but with 3 extended opcode bits
 ;; in place of the general register code.
 (define (Ex-param extended-opcode operand)
   `(mod-r/m ,extended-opcode
-	    (arg ,operand)))
+            (arg ,operand)))

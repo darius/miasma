@@ -221,7 +221,7 @@
 (outsb  #x6E                    "Output to port from string" (%SI))
 (outsw  =16 #x6F                "Output to port from string" (%SI))
 (outsd  =32 #x6F                "Output to port from string" (%ESI))
-(int    #xCD Ub           	"Interrupt vector number specified by immediate byte" #t) ; confused about dirtiness... [bts]
+(int    #xCD Ub                 "Interrupt vector number specified by immediate byte" #t) ; confused about dirtiness... [bts]
 (int.3  #xCC                    "Interrupt 3 -- Trap to debugger" #t) ; ditto
 (into   #xCE                    "Interrupt 4 -- if overflow flag is 1" #t) ; ditto
 (iret   =16 #xCF                "Interrupt return" #t)

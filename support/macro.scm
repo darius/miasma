@@ -12,21 +12,21 @@
 (define define-macro
   (lambda (symbol expander)
     (set! macroexpanders
-	  (cons (cons symbol expander) macroexpanders))))
+          (cons (cons symbol expander) macroexpanders))))
 
 (define macroexpand
   (lambda (form)
     (cond ((and (pair? form)
-		(symbol? (car form))
-		(get-macroexpander (car form)))
-	   => (lambda (expander)
-		(macroexpand (apply expander (cdr form)))))
-	  (else (walk macroexpand form)))))
+                (symbol? (car form))
+                (get-macroexpander (car form)))
+           => (lambda (expander)
+                (macroexpand (apply expander (cdr form)))))
+          (else (walk macroexpand form)))))
 
 (define get-macroexpander
   (lambda (symbol)
     (cond ((assq symbol macroexpanders) => cdr)
-	  (else #f))))
+          (else #f))))
 
 (define macroexpanders '())
 
@@ -45,12 +45,12 @@
   (lambda (infile outfile reader transducer writer)
     (call-with-input-file infile
       (lambda (in)
-	(call-with-new-output-file outfile
-	  (lambda (out)
-	    (let loop ((exp (reader in)))
-	      (cond ((not (eof-object? exp))
-		     (writer (transducer exp) out)
-		     (loop (reader in)))))))))))
+        (call-with-new-output-file outfile
+          (lambda (out)
+            (let loop ((exp (reader in)))
+              (cond ((not (eof-object? exp))
+                     (writer (transducer exp) out)
+                     (loop (reader in)))))))))))
 
 
 ;; Scheme syntax.
@@ -78,13 +78,13 @@
   (k (cadr exp) (caddr exp)))
 
 (define (with-do exp k)
-  (k (map (lambda (clause)		;fill in default values
-	    (if (= (length clause) 3)
-		clause
-		(list (car clause) 
-		      (if (< (length clause) 2) #f (cadr clause))
-		      (if (< (length clause) 3) (car clause) (caddr clause)))))
-	  (cadr exp))
+  (k (map (lambda (clause)              ;fill in default values
+            (if (= (length clause) 3)
+                clause
+                (list (car clause) 
+                      (if (< (length clause) 2) #f (cadr clause))
+                      (if (< (length clause) 3) (car clause) (caddr clause)))))
+          (cadr exp))
      (caddr exp) 
      (cdddr exp)))
 
@@ -110,9 +110,9 @@
   (define (walk-let form)
     (lambda (decls body)
       `(,form ,(map (lambda (decl) 
-		      `(,(car decl) ,(fn (cadr decl))))
-		    decls)
-	 ,@(map fn body))))
+                      `(,(car decl) ,(fn (cadr decl))))
+                    decls)
+         ,@(map fn body))))
 
   (cond
    ((not (pair? exp)) exp)
@@ -124,24 +124,24 @@
 
       ((define)
        (with-define exp
-	 (lambda (name value)
-	   `(define ,name ,(fn value)))))
+         (lambda (name value)
+           `(define ,name ,(fn value)))))
 
       ((lambda)
        (with-lambda exp 
-	 (lambda (formals body)
-	   `(lambda ,formals ,@(map fn body)))))
+         (lambda (formals body)
+           `(lambda ,formals ,@(map fn body)))))
 
       ((let)
        (with-let exp
-	 (lambda (proc decls body)
-	   (let ((new-decls 
-		  (map (lambda (decl) 
-			 `(,(car decl) ,(fn (cadr decl))))
-			 decls))
-		 (new-body (map fn body)))
-	     `(let ,proc ,new-decls ,@new-body)))
-	 (walk-let 'let)))
+         (lambda (proc decls body)
+           (let ((new-decls 
+                  (map (lambda (decl) 
+                         `(,(car decl) ,(fn (cadr decl))))
+                         decls))
+                 (new-body (map fn body)))
+             `(let ,proc ,new-decls ,@new-body)))
+         (walk-let 'let)))
 
       ((letrec)
        (with-letrec exp (walk-let 'letrec)))
@@ -151,53 +151,53 @@
 
       ((set!)
        (with-set! exp
-	 (lambda (var exp)
-	   `(set! ,var ,(fn exp)))))
+         (lambda (var exp)
+           `(set! ,var ,(fn exp)))))
 
-      ((do)	
+      ((do)     
        (with-do exp
-	 (lambda (clauses termination body)
-	   `(do ,(map (lambda (clause)
-			`(,(car clause) ,(fn (cadr clause))
-					,(fn (caddr clause))))
-		      clauses)
-		,(map fn termination)
-	      ,@(map fn body)))))
+         (lambda (clauses termination body)
+           `(do ,(map (lambda (clause)
+                        `(,(car clause) ,(fn (cadr clause))
+                                        ,(fn (caddr clause))))
+                      clauses)
+                ,(map fn termination)
+              ,@(map fn body)))))
 
       ((if and or begin)
        `(,(car exp) ,@(map fn (cdr exp))))
 
       ((cond)
        (with-cond exp
-	 (lambda (clauses)
-	   `(cond 
-	     ,@(map 
-		(lambda (clause)
-		  (cond ((eq? (car clause) 'else)
-			 `(else ,@(map fn (cdr clause))))
-			((and (pair? (cdr clause))
-			      (eq? (cadr clause) '=>))
-			 `(,(fn (car clause))
-			   =>
-			   ,(fn (caddr clause))))
-			(else
-			 (map fn clause))))
-		clauses)))))
+         (lambda (clauses)
+           `(cond 
+             ,@(map 
+                (lambda (clause)
+                  (cond ((eq? (car clause) 'else)
+                         `(else ,@(map fn (cdr clause))))
+                        ((and (pair? (cdr clause))
+                              (eq? (cadr clause) '=>))
+                         `(,(fn (car clause))
+                           =>
+                           ,(fn (caddr clause))))
+                        (else
+                         (map fn clause))))
+                clauses)))))
 
       ((case)
        (with-case exp
          (lambda (test-exp clauses)
-	   `(case ,(fn test-exp)
-	      ,@(map (lambda (clause)
-		       `(,(car clause) ,@(map fn (cdr clause))))
-		     clauses)))))
+           `(case ,(fn test-exp)
+              ,@(map (lambda (clause)
+                       `(,(car clause) ,@(map fn (cdr clause))))
+                     clauses)))))
 
       ((quasiquote)
        (list 'quasiquote (walk-quasiquote fn (cadr exp))))
 
       (else         ; application
        (cons (fn (car exp))
-	     (map fn (cdr exp))))))))
+             (map fn (cdr exp))))))))
 
 ;;FIXME: doesn't handle nested quasiquotes.
 
@@ -209,4 +209,4 @@
       ((unquote unquote-splicing)
        (list (car form) (fn (cadr form))))
       (else (cons (walk-quasiquote fn (car form))
-		  (walk-quasiquote fn (cdr form))))))))
+                  (walk-quasiquote fn (cdr form))))))))

@@ -29,7 +29,7 @@ Code generation doesn't actually interpret this table directly --
 instead, we preparse an entry into a list of param objects.  For
 example, (/2 Eb) becomes the result of the procedure call 
 
-	(Ex-param 2 (expand-abbrev 'Eb))
+        (Ex-param 2 (expand-abbrev 'Eb))
 
 It should be clear that disassembly can proceed in the same way --
 going through a table entry in order, consuming machine-code bits that
@@ -50,16 +50,16 @@ destination operands come first.
 
 What the Scheme files do:
 
-assemble.scm	Translate sequences of instructions, resolving labels.
-bits.scm	Fixed-width 2's-complement numbers.
-gas.scm		Translate Miasma programs to gas syntax.
+assemble.scm    Translate sequences of instructions, resolving labels.
+bits.scm        Fixed-width 2's-complement numbers.
+gas.scm         Translate Miasma programs to gas syntax.
 java.scm        Experimental Java code producer -- can be ignored.
-miasma.scm	Load the system and run unit tests.
-parse.scm	Convert instruction-table entries to internal form.
-sinks.scm	Sinks for byte streams.
-x86.scm		The actual Intel x86 logic -- code production, etc.
+miasma.scm      Load the system and run unit tests.
+parse.scm       Convert instruction-table entries to internal form.
+sinks.scm       Sinks for byte streams.
+x86.scm         The actual Intel x86 logic -- code production, etc.
 
-tables/*.scm	The instruction tables.  Only i386.scm is used right now.
+tables/*.scm    The instruction tables.  Only i386.scm is used right now.
 
-test-<foo>.scm	Unit tests for <foo>.scm.
-fun-tests.scm	Functional tests of the whole system.
+test-<foo>.scm  Unit tests for <foo>.scm.
+fun-tests.scm   Functional tests of the whole system.

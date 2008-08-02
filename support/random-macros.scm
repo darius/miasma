@@ -3,7 +3,7 @@
 (define-macro 'with
   (lambda (f pairs . body)
     `(,f (lambda ,(map car pairs) ,@body)
-	 ,@(map cadr pairs))))
+         ,@(map cadr pairs))))
 
 
 ; (flambda ((tag . args) body ...) ...)
@@ -12,18 +12,18 @@
 (define-macro 'flambda
   (lambda cases
     (let ((vars (map (lambda (_) (generate-symbol 'flambda))
-		     cases)))
+                     cases)))
       `(let ,(map (lambda (var pair)
-		    `(,var (lambda ,(cdar pair) ,@(cdr pair))))
-		  vars
-		  cases)
-	 (lambda (tag)
-	   (case tag
-	     ,@(map (lambda (var pair)
-		      `((,(caar pair)) ,var))
-		    vars
-		    cases)
-	     (else (impossible))))))))
+                    `(,var (lambda ,(cdar pair) ,@(cdr pair))))
+                  vars
+                  cases)
+         (lambda (tag)
+           (case tag
+             ,@(map (lambda (var pair)
+                      `((,(caar pair)) ,var))
+                    vars
+                    cases)
+             (else (impossible))))))))
 
 
 

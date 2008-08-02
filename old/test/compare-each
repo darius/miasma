@@ -1,8 +1,8 @@
 #!/bin/sh
 for p in "$@"
 do 
-	if diff $p.o $p.bl
-	then /bin/true
-	else echo "$p failed."; exit 1
-	fi
+        if diff $p.o $p.bl
+        then /bin/true
+        else echo "$p failed."; exit 1
+        fi
 done

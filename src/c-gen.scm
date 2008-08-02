@@ -12,20 +12,20 @@
   (say-to port (c-enum registers (map register-number registers)))
   (say-to port)
   (for-each (lambda (spec)
-	      (say-to port (c-gen (spec.mnemonic spec)
-				  (spec.params spec))))
-	    the-specs))
+              (say-to port (c-gen (spec.mnemonic spec)
+                                  (spec.params spec))))
+            the-specs))
 
 
 ; Code translation
 
 (define (c-gen mnemonic code-list)
   (let ((vars (c-make-variable-list 
-	       (foldl + 0 (map c-variable-count code-list)))))
+               (foldl + 0 (map c-variable-count code-list)))))
     (c-stmt-macro (c-insn-name mnemonic)
-		  vars
-		  (c-body (map c-parenthesize vars)
-			  code-list))))
+                  vars
+                  (c-body (map c-parenthesize vars)
+                          code-list))))
 
 (define (c-make-variable-list n)
   (map (lambda (k) (string-append "v" (number->string k)))
@@ -33,32 +33,32 @@
 
 (define (c-body vars code-list)
   (let walking ((code-list code-list)
-		(stmts '())
-		(vars vars))
+                (stmts '())
+                (vars vars))
     (if (null? code-list)
-	stmts
-	((walk-code (car code-list) c-code c-exp) 
-	 vars
-	 (lambda (vars cv) 
-	   (walking (cdr code-list)
-		    (cons cv stmts)
-		    vars))))))
+        stmts
+        ((walk-code (car code-list) c-code c-exp) 
+         vars
+         (lambda (vars cv) 
+           (walking (cdr code-list)
+                    (cons cv stmts)
+                    vars))))))
 
 (define c-code
   (flambda
    ((bytes signed? count exp)
     (with bind ((cv exp))
-	  (unit 
-	   (c-exp-stmt
-	    (c-call (string-append (if signed? "x86_push_i" "x86_push_u")
-				   (integer->string (* 8 count)))
-		    cv)))))
+          (unit 
+           (c-exp-stmt
+            (c-call (string-append (if signed? "x86_push_i" "x86_push_u")
+                                   (integer->string (* 8 count)))
+                    cv)))))
    ((swap-args code)
     (swapping code))
    ((mod-r/m e1 e2)
     (with bind ((cv1 e1))
-	  (with bind ((cv2 e2))
-		(unit (c-exp-stmt (c-call "mod_rm" cv1 cv2))))))))
+          (with bind ((cv2 e2))
+                (unit (c-exp-stmt (c-call "mod_rm" cv1 cv2))))))))
 
 (define c-exp
   (flambda
@@ -66,10 +66,10 @@
     (unit (c-int-literal n)))
    ((op operator e1 e2)
     (with bind ((cv1 e1))
-	  (with bind ((cv2 e2))
-		(unit (c-binop (symbol->string operator)
-			       cv1 
-			       cv2)))))
+          (with bind ((cv2 e2))
+                (unit (c-binop (symbol->string operator)
+                               cv1 
+                               cv2)))))
    ((hereafter)
     (unit "hereafter"))
    ((arg . ignore)
@@ -88,8 +88,8 @@
       code)
      ((mod-r/m e1 e2)
       (with bind ((cv1 e1))
-	    (with bind ((cv2 e2))
-		  (unit (+ cv1 cv2)))))))
+            (with bind ((cv2 e2))
+                  (unit (+ cv1 cv2)))))))
 
   (define c-exp
     (flambda
@@ -97,32 +97,32 @@
       (unit 0))
      ((op operator e1 e2)
       (with bind ((cv1 e1))
-	    (with bind ((cv2 e2))
-		  (unit (+ cv1 cv2)))))
+            (with bind ((cv2 e2))
+                  (unit (+ cv1 cv2)))))
      ((hereafter)
       (unit 0))
      ((arg . ignore)
       (unit 1))))
 
   ((walk-code code c-code c-exp) '_
-				 (lambda (_ count) count)))
+                                 (lambda (_ count) count)))
 
 
 ; C code constructors
 
 (define (c-enum symbols values)
   (string-join `("enum {"
-		 ,@(map (lambda (sym val)
-			  (string-append "  "
-					 (as-legal-c-identifier 
-					  (symbol->string sym))
-					 " = "
-					 (c-int-literal val)
-					 ","))
-			symbols
-			values)
-		 "};")
-	       (string #\newline)))
+                 ,@(map (lambda (sym val)
+                          (string-append "  "
+                                         (as-legal-c-identifier 
+                                          (symbol->string sym))
+                                         " = "
+                                         (c-int-literal val)
+                                         ","))
+                        symbols
+                        values)
+                 "};")
+               (string #\newline)))
 
 (define (c-int-literal n)
   (if (and (<= 0 n) (exact? n))
@@ -137,21 +137,21 @@
 
 (define (c-call fn-cv . args-cv)
   (string-append fn-cv
-		 " ("
-		 (string-join args-cv ", ")
-		 ")"))
+                 " ("
+                 (string-join args-cv ", ")
+                 ")"))
 
 (define (c-exp-stmt cv)
   (string-append cv ";"))
 
 (define (c-stmt-macro name vars stmts)
   (string-join `(,(c-declare name vars) 
-		 "  do {"
-		 "    const u8 *hereafter = x86_bptr;"
-		 ,@(map (lambda (stmt) (string-append "    " stmt))
-			stmts)
-		 "  } while (0)")
-	       c-line-continuation))
+                 "  do {"
+                 "    const u8 *hereafter = x86_bptr;"
+                 ,@(map (lambda (stmt) (string-append "    " stmt))
+                        stmts)
+                 "  } while (0)")
+               c-line-continuation))
 
 (define c-line-continuation
   (string #\space #\\ #\newline))
@@ -169,9 +169,9 @@
 (define (as-legal-c-identifier str)
   (list->string
    (map (lambda (c)
-	  (case c
-	    ((#\- #\.) #\_)
-	    ((#\?) #\c)
-	    (else c)))
-	(filter (lambda (c) (not (memq c '(#\: #\%))))
-		(string->list str)))))
+          (case c
+            ((#\- #\.) #\_)
+            ((#\?) #\c)
+            (else c)))
+        (filter (lambda (c) (not (memq c '(#\: #\%))))
+                (string->list str)))))

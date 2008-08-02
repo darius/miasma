@@ -8,7 +8,7 @@
 
 static u8 buf[256];
 static x86_bufptr x86_bptr = buf + sizeof buf;
-static i32 x86_tmp;		/* ugh */
+static i32 x86_tmp;             /* ugh */
 
 typedef int (*func)();
 
@@ -184,9 +184,9 @@ next (void)
       case '7':
       case '8':
       case '9':
-	tok.tag = PUSH;
-	tok.value = scan_number ();
-	break;
+        tok.tag = PUSH;
+        tok.value = scan_number ();
+        break;
 
       case '+': 
       case '-': 
@@ -195,12 +195,12 @@ next (void)
       case '%': 
       case '(':
       case ')':
-	tok.tag = *--scan;
-	break;
+        tok.tag = *--scan;
+        break;
 
       default:
-	printf ("Whoops\n");
-	exit (0);
+        printf ("Whoops\n");
+        exit (0);
       }
 }
 
