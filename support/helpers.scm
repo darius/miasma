@@ -21,7 +21,7 @@
         (cond ((char=? c delimiter)
                `(#\\ ,c ,@accum))
               ((assv c '((#\newline #\\ #\n)
-                         (#\Tab     #\\ #\t)))
+                         (#\tab     #\\ #\t)))
                => (lambda (pair) (append (cdr pair) accum)))
               ((char-printable? c)
                (cons c accum))
