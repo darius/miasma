@@ -67,7 +67,7 @@
           ((string? x) x)
           ((integer? x) (integer->string x))
           ((number? x) (number->string x))
-          (else (impossible)))))
+          (else (impossible 'coerce-string x)))))
 
 (define identity (lambda (x) x))
 

@@ -23,7 +23,7 @@
                       `((,(caar pair)) ,var))
                     vars
                     cases)
-             (else (impossible))))))))
+             (else (impossible 'flambda tag))))))))
 
 
 

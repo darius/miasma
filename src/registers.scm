@@ -10,7 +10,7 @@
       ((1) '(%al %ah %bl %bh %cl %ch %dl %dh))
       ((2) '(%ax %bx %cx %dx %si %di %bp %sp))
       ((4) '(%eax %ebx %ecx %edx %esi %edi %ebp %esp))
-      (else (impossible)))))
+      (else (impossible 'possible-registers size)))))
 
 ;; Return the 3-bit code for general register REG.
 (define register-number

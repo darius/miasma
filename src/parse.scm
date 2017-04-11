@@ -95,7 +95,7 @@
                            (cadr p)
                            #f))
             (loop (cdr p) (cons (car p) r)))
-        (impossible))))
+        (impossible 'parse-spec spec))))
 
 (define (parse-param param)
   (let ((param (expand-abbrev param)))
@@ -148,8 +148,8 @@
                               '((/0 0) (/1 1) (/2 2) (/3 3)
                                 (/4 4) (/5 5) (/6 6) (/7 7))))))
              (Ex-param extended-opcode (car ls))))
-          (else (impossible)))))
-     (else (impossible)))))
+          (else (impossible 'parse-param param)))))
+     (else (impossible 'parse-param param)))))
 
 (define abbrevs
   (map (lambda (abbrev-pair expanded-pair)

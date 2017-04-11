@@ -13,7 +13,7 @@
         ((mod-r/m)
          (f (walk-exp (car rands) exp-f)
             (walk-exp (cadr rands) exp-f)))
-        (else (impossible))))))
+        (else (impossible 'walk-code code))))))
 
 (define (walk-exp exp exp-f)
   (let walking ((exp exp))
@@ -32,7 +32,7 @@
            ((exp-f rator)))
           ((arg)
            (apply (exp-f rator) rands))
-          (else (impossible))))))))
+          (else (impossible 'walk-exp exp))))))))
 
 
 (define (unit v)
